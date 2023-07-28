@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alvin.mall.modules.pms.mapper.PmsProductCategoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.alvin.mall.modules.pms.model.PmsProductCategory">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="name" property="name" />
+        <result column="level" property="level" />
+        <result column="product_count" property="productCount" />
+        <result column="product_unit" property="productUnit" />
+        <result column="nav_status" property="navStatus" />
+        <result column="show_status" property="showStatus" />
+        <result column="sort" property="sort" />
+        <result column="icon" property="icon" />
+        <result column="keywords" property="keywords" />
+        <result column="description" property="description" />
+    </resultMap>
+
+    <resultMap id="GetListWithChildrenMap" type="com.alvin.mall.modules.pms.dto.PmsProductCategoryWithChildrenDTO" >
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <collection property="children" columnPrefix="sub_" resultMap="BaseResultMap" />
+    </resultMap>
+
+    <select id="getListWithChildren" resultMap="GetListWithChildrenMap">
+        SELECT
+            pc.id,
+            pc.`name`,
+            ppc.id AS sub_id,
+            ppc.`name` AS sub_name
+        FROM
+            pms_product_category AS pc
+                LEFT JOIN pms_product_category AS ppc ON pc.id = ppc.parent_id
+        WHERE
+            pc.parent_id = 0 -- AND ppc.id IS NOT NULL
+    </select>
+
+</mapper>

@@ -1,0 +1,58 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: mall-portal
+  profiles:
+    active: dev
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    auto-mapping-behavior: partial
+    map-underscore-to-camel-case: true
+
+redis:
+  database: mall
+  expire:
+    common: 86400 # 24小时
+  key:
+    user: 'ums:member'
+    prefix:
+      orderId: 'portal:orderId:'
+
+#@Value("${jwt.secret}")
+#private String secret;
+#@Value("${jwt.expiration}")
+#private Long expiration;
+#@Value("${jwt.tokenHead}")
+#private String tokenHead;
+jwt:
+  secret: 15c53d241a095ecdf8120b4a2e446aac
+  expiration: 86400 # 过期时间，一天
+  tokenHead: Bearer # jwt规范，令牌前的一个标志字符串
+  tokenHeader: Authorization # 告诉客户端携带token的请求头名是什么
+
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /doc.html
+      - /swagger-ui.html
+      - /swagger-resources/**
+      - /swagger/**
+      - /**/v2/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /webjars/springfox-swagger-ui/**
+      - /druid/**
+      - /user/**
+      - /home/**
+      - /product/**
+      - /error
+
